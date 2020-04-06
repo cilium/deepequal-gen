@@ -10,7 +10,7 @@ Copyright 2019 Wind River Systems, Inc.
 package main
 
 import (
-	"github.com/wind-river/deepequal-gen/generators"
+	"github.com/cilium/deepequal-gen/generators"
 	"k8s.io/gengo/args"
 
 	"github.com/spf13/pflag"

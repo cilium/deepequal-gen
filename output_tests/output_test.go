@@ -11,12 +11,12 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/google/gofuzz"
 
-	"github.com/wind-river/deepequal-gen/output_tests/aliases"
-	"github.com/wind-river/deepequal-gen/output_tests/builtins"
-	"github.com/wind-river/deepequal-gen/output_tests/maps"
-	"github.com/wind-river/deepequal-gen/output_tests/pointer"
-	"github.com/wind-river/deepequal-gen/output_tests/slices"
-	"github.com/wind-river/deepequal-gen/output_tests/structs"
+	"github.com/cilium/deepequal-gen/output_tests/aliases"
+	"github.com/cilium/deepequal-gen/output_tests/builtins"
+	"github.com/cilium/deepequal-gen/output_tests/maps"
+	"github.com/cilium/deepequal-gen/output_tests/pointer"
+	"github.com/cilium/deepequal-gen/output_tests/slices"
+	"github.com/cilium/deepequal-gen/output_tests/structs"
 )
 
 func TestWithValueFuzzer(t *testing.T) {
