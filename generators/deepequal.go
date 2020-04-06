@@ -730,6 +730,10 @@ func (g *genDeepEqual) doStruct(t *types.Type, sw *generator.SnippetWriter) {
 
 	for _, m := range ut.Members {
 		ft := m.Type
+		ttag := extractEnabledTag(m.CommentLines)
+		if ttag != nil && ttag.value == "false" {
+			continue
+		}
 		uft := underlyingType(ft)
 
 		typeArgs := generator.Args{
