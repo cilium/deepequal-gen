@@ -2,6 +2,7 @@
 SPDX-License-Identifier: Apache-2.0
 Copyright 2016 The Kubernetes Authors.
 Copyright 2019 Wind River Systems, Inc.
+Copyright 2020 Isovalent, Inc.
 */
 
 package generators
@@ -89,20 +90,15 @@ func extractEnabledTag(comments []string) *enabledTagValue {
 	return tag
 }
 
-func extractUnorderedArrayTypeTag(t *types.Type) *enabledTagValue {
-	comments := append(append([]string{}, t.SecondClosestCommentLines...), t.CommentLines...)
-	return extractUnorderedArrayTag(comments)
-}
-
-func extractUnorderedArrayTag(comments []string) *enabledTagValue {
-	tagVals := types.ExtractCommentTags("+", comments)[tagUnorderedArraysTagName]
+func extractTag(tagName string, comments []string) *enabledTagValue {
+	tagVals := types.ExtractCommentTags("+", comments)[tagName]
 	if tagVals == nil {
 		// No match for the tag.
 		return nil
 	}
 	// If there are multiple values, abort.
 	if len(tagVals) > 1 {
-		klog.Fatalf("Found %d %s tags: %q", len(tagVals), tagUnorderedArraysTagName, tagVals)
+		klog.Fatalf("Found %d %s tags: %q", len(tagVals), tagName, tagVals)
 	}
 
 	// If we got here we are returning something.
@@ -111,42 +107,22 @@ func extractUnorderedArrayTag(comments []string) *enabledTagValue {
 	// Get the tag value.
 	parts := strings.Split(tagVals[0], ",")
 	if len(parts) > 1 {
-		klog.Fatalf("Found %d %s tag values: %q", len(tagVals[0]), tagUnorderedArraysTagName, tagVals)
+		klog.Fatalf("Found %d %s tag values: %q", len(tagVals[0]), tagName, tagVals)
 	}
 
 	tag.value = parts[0]
 
 	return tag
+}
+
+func extractUnorderedArrayTypeTag(t *types.Type) *enabledTagValue {
+	comments := append(append([]string{}, t.SecondClosestCommentLines...), t.CommentLines...)
+	return extractTag(tagUnorderedArraysTagName, comments)
 }
 
 func extractIgnoreNilFieldsTypeTag(t *types.Type) *enabledTagValue {
 	comments := append(append([]string{}, t.SecondClosestCommentLines...), t.CommentLines...)
-	return extractIgnoreNilFieldsTag(comments)
-}
-
-func extractIgnoreNilFieldsTag(comments []string) *enabledTagValue {
-	tagVals := types.ExtractCommentTags("+", comments)[tagIgnoreNilFieldsTagName]
-	if tagVals == nil {
-		// No match for the tag.
-		return nil
-	}
-	// If there are multiple values, abort.
-	if len(tagVals) > 1 {
-		klog.Fatalf("Found %d %s tags: %q", len(tagVals), tagIgnoreNilFieldsTagName, tagVals)
-	}
-
-	// If we got here we are returning something.
-	tag := &enabledTagValue{}
-
-	// Get the tag value.
-	parts := strings.Split(tagVals[0], ",")
-	if len(parts) > 1 {
-		klog.Fatalf("Found %d %s tag values: %q", len(tagVals[0]), tagIgnoreNilFieldsTagName, tagVals)
-	}
-
-	tag.value = parts[0]
-
-	return tag
+	return extractTag(tagIgnoreNilFieldsTagName, comments)
 }
 
 // NameSystems returns the name system used by the generators in this package.
