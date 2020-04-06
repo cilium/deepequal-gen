@@ -55,6 +55,29 @@ c := MyStruct{Name: "John", Address: "Somewhere", Age: &ageC}
 a.DeepEqual(&b) == true
 b.DeepEqual(&c) == false
 ```
+
+The `DeepEqual` method name can be made private in case the developer decides
+to implement its owned `DeepEqual` for some specific fields fields:
+
+```go
+// +deepequal-gen:ignore-nil-fields=true
+// +deepequal-gen:private-method=true
+type MyStruct struct {
+    Name string `json:"name"`
+    Address string `json:"address"`
+    // +deepequal-gen=false
+    Age *int `json:"age,omitempty"`
+}
+
+func (m *MyStruct) DeepEqual(other *MyStruct) bool{
+    if m.Age != m.Age {
+        return false
+    }
+    // Call generated method `deepEqual` which compares all fields except
+    // 'Age'.
+    return m.deepEqual(other)
+}
+```
  
 All generation is governed by comment tags in the source.  Any package may
 request DeepEqual generation by including a comment in the file-comments of
