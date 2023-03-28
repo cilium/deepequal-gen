@@ -29,6 +29,14 @@ func (in *StructB) DeepEqual(other *StructB) bool {
 		return false
 	}
 
+	if in.OtherWithPrimitivesOnly != other.OtherWithPrimitivesOnly {
+		return false
+	}
+
+	if !in.OtherWithPointers.DeepEqual(&other.OtherWithPointers) {
+		return false
+	}
+
 	return true
 }
 
