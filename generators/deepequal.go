@@ -18,7 +18,6 @@ import (
 	"k8s.io/gengo/generator"
 	"k8s.io/gengo/namer"
 	"k8s.io/gengo/types"
-
 	"k8s.io/klog"
 )
 
@@ -327,9 +326,12 @@ func deepEqualMethodNameFromComment(lines []string) string {
 // if the type is wrong. DeepEqual allows more efficient deep copy
 // implementations to be defined by the type's author.  The correct signature
 // for a type T is:
-//    func (t T) DeepEqual(t *T)
+//
+//	func (t T) DeepEqual(t *T)
+//
 // or:
-//    func (t *T) DeepEqual(t *T)
+//
+//	func (t *T) DeepEqual(t *T)
 func deepEqualMethod(t *types.Type) (*types.Signature, error) {
 	methodName := deepEqualMethodNameFromType(t)
 	f, found := t.Methods[methodName]
