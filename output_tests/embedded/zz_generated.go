@@ -50,7 +50,7 @@ func (in *OtherStructPointer) DeepEqual(other *OtherStructPointer) bool {
 	if (in.Self == nil) != (other.Self == nil) {
 		return false
 	} else if in.Self != nil {
-		if !in.Self.DeepEqual(other.Self) {
+		if *in.Self != *other.Self {
 			return false
 		}
 	}
@@ -114,7 +114,7 @@ func (in *StructWithEmbeddedPointerStructs) DeepEqual(other *StructWithEmbeddedP
 		return false
 	}
 
-	if !in.OtherStructPointer.DeepEqual(&other.OtherStructPointer) {
+	if in.OtherStructPointer != other.OtherStructPointer {
 		return false
 	}
 

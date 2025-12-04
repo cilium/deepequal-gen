@@ -579,10 +579,10 @@ func (g *genDeepEqual) doMap(t *types.Type, sw *generator.SnippetWriter, topLeve
 	sw.Do("if otherValue, present := (*other)[key]; !present {\n", nil)
 	sw.Do("return false\n", nil)
 	sw.Do("} else {\n", nil)
-	if uet.IsPrimitive() {
+	if uet.IsComparable() {
 		sw.Do("if inValue != otherValue {\n", nil)
 	} else if uet.Kind == types.Pointer {
-		if uet.Elem.IsPrimitive() {
+		if uet.Elem.IsComparable() {
 			sw.Do("if ((inValue == nil) != (otherValue == nil) || ((inValue != nil) && (otherValue != nil) && (*inValue != *otherValue))) {\n", nil)
 		} else {
 			sw.Do("if !inValue.DeepEqual(otherValue) {\n", nil)
@@ -629,10 +629,10 @@ func (g *genDeepEqual) doSlice(t *types.Type, sw *generator.SnippetWriter, topLe
 		sw.Do("for _, inElement := range *in {\n", nil)
 		sw.Do("found := false\n", nil)
 		sw.Do("for _, otherElement := range *other {\n", nil)
-		if uet.IsPrimitive() {
+		if uet.IsComparable() {
 			sw.Do("if inElement == otherElement {\n", nil)
 		} else if uet.Kind == types.Pointer {
-			if uet.Elem.IsPrimitive() {
+			if uet.Elem.IsComparable() {
 				sw.Do("if ((inElement == nil) && (otherElement == nil) || ((inElement != nil) && (otherElement != nil) && (*inElement == *otherElement))) {\n", nil)
 			} else {
 				sw.Do("if inElement.DeepEqual(otherElement) {\n", nil)
@@ -656,10 +656,10 @@ func (g *genDeepEqual) doSlice(t *types.Type, sw *generator.SnippetWriter, topLe
 		sw.Do("}\n", nil)
 	} else {
 		sw.Do("for i, inElement := range *in {\n", nil)
-		if uet.IsPrimitive() {
+		if uet.IsComparable() {
 			sw.Do("if inElement != (*other)[i] {\n", nil)
 		} else if uet.Kind == types.Pointer {
-			if uet.Elem.IsPrimitive() {
+			if uet.Elem.IsComparable() {
 				sw.Do("if ((inElement == nil) && ((*other)[i] == nil) || ((inElement != nil) && ((*other)[i] != nil) && (*inElement != *(*other)[i]))) {\n", nil)
 			} else {
 				sw.Do("if !inElement.DeepEqual((*other)[i]) {\n", nil)
@@ -678,24 +678,6 @@ func (g *genDeepEqual) doSlice(t *types.Type, sw *generator.SnippetWriter, topLe
 		sw.Do("}\n", nil)
 	}
 	sw.Do("}\n", nil)
-}
-
-// IsAssignable returns whether the type is deep-assignable.  For example,
-// slices and maps and pointers are shallow copies, but ints and strings are
-// complete.
-func IsComparable(t *types.Type) bool {
-	if t.IsPrimitive() {
-		return true
-	}
-	if t.Kind == types.Struct {
-		for _, m := range t.Members {
-			if !IsComparable(m.Type) {
-				return false
-			}
-		}
-		return true
-	}
-	return false
 }
 
 // doStruct generates code for a struct or an alias to a struct. The generated code
@@ -746,7 +728,7 @@ func (g *genDeepEqual) doStruct(t *types.Type, sw *generator.SnippetWriter, topL
 			sw.Do("if (in.$.name$ == nil) != (other.$.name$ == nil) {\n", typeArgs)
 			sw.Do("return false\n", nil)
 			sw.Do("} else if in.$.name$ != nil {\n", typeArgs)
-			if ufet.IsPrimitive() {
+			if ufet.IsComparable() {
 				sw.Do("if *in.$.name$ != *other.$.name$ {\n", typeArgs)
 			} else {
 				sw.Do("if !in.$.name$.DeepEqual(other.$.name$) {\n", typeArgs)
@@ -767,7 +749,7 @@ func (g *genDeepEqual) doStruct(t *types.Type, sw *generator.SnippetWriter, topL
 			sw.Do("}\n\n", nil)
 
 		case uft.Kind == types.Struct:
-			if IsComparable(uft) {
+			if uft.IsComparable() {
 				sw.Do("if in.$.name$ != other.$.name$ {\n", typeArgs)
 			} else {
 				sw.Do("if !in.$.name$.DeepEqual(&other.$.name$) {\n", typeArgs)

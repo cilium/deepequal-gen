@@ -212,7 +212,7 @@ func (in *Ttest) DeepEqual(other *Ttest) bool {
 			return false
 		} else {
 			for i, inElement := range *in {
-				if (inElement == nil) && ((*other)[i] == nil) || ((inElement != nil) && ((*other)[i] != nil) && (*inElement != *(*other)[i])) {
+				if inElement != (*other)[i] {
 					return false
 				}
 			}
@@ -246,7 +246,7 @@ func (in *Ttest) DeepEqual(other *Ttest) bool {
 			return false
 		} else {
 			for i, inElement := range *in {
-				if !inElement.DeepEqual((*other)[i]) {
+				if inElement != (*other)[i] {
 					return false
 				}
 			}

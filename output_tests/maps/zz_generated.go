@@ -259,7 +259,7 @@ func (in *Ttest) DeepEqual(other *Ttest) bool {
 				if otherValue, present := (*other)[key]; !present {
 					return false
 				} else {
-					if (inValue == nil) != (otherValue == nil) || ((inValue != nil) && (otherValue != nil) && (*inValue != *otherValue)) {
+					if inValue != otherValue {
 						return false
 					}
 				}
@@ -301,7 +301,7 @@ func (in *Ttest) DeepEqual(other *Ttest) bool {
 				if otherValue, present := (*other)[key]; !present {
 					return false
 				} else {
-					if !inValue.DeepEqual(otherValue) {
+					if inValue != otherValue {
 						return false
 					}
 				}
