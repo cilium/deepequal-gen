@@ -12,6 +12,7 @@ import (
 	"github.com/google/gofuzz"
 
 	"github.com/cilium/deepequal-gen/output_tests/aliases"
+	"github.com/cilium/deepequal-gen/output_tests/arrays"
 	"github.com/cilium/deepequal-gen/output_tests/builtins"
 	"github.com/cilium/deepequal-gen/output_tests/maps"
 	"github.com/cilium/deepequal-gen/output_tests/pointer"
@@ -22,6 +23,7 @@ import (
 func TestWithValueFuzzer(t *testing.T) {
 	tests := []interface{}{
 		aliases.Ttest{},
+		arrays.Ttest{},
 		builtins.Ttest{},
 		maps.Ttest{},
 		pointer.Ttest{},
