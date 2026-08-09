@@ -1,6 +1,6 @@
 module github.com/cilium/deepequal-gen
 
-go 1.20
+go 1.22.0
 
 require (
 	github.com/davecgh/go-spew v1.1.1
@@ -12,6 +12,7 @@ require (
 
 require (
 	github.com/go-logr/logr v0.2.0 // indirect
-	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/tools v0.16.1 // indirect
+	golang.org/x/mod v0.23.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/tools v0.30.0 // indirect
 )
